@@ -1,4 +1,4 @@
-# Diabetic Retinopath Detection
+# Diabetic Retinopathy Detection
 
 ## To get started
 
