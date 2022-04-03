@@ -16,7 +16,7 @@ const LoginWindow = styled(Paper)({
 });
 
 function Form(props) {
-  const { mode, formData, onChange } = props;
+  const { mode, formData, onChange, onSubmit } = props;
 
   const formActions = {
     signIn: {
@@ -112,7 +112,12 @@ function Form(props) {
               onChange={onChange}
             />
           ))}
-          <Button variant="contained" color="primary" sx={{ width: 100 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ width: 100 }}
+            onClick={onSubmit}
+          >
             {currentForm.btnText}
           </Button>
           {currentForm.redirectText}

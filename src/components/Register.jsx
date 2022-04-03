@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Form from './Form';
+import { useAuth } from 'providers/AuthProvider';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,14 @@ function Register() {
     email: '',
     password: ''
   });
+  const { signUp, currentUser } = useAuth();
+
+  const onSubmit = () => {
+    // const { email, password } = formData;
+    signUp({
+      ...formData
+    });
+  };
 
   const handleFormDataChange = (event) => {
     const { name, value } = event.target;
@@ -17,8 +26,14 @@ function Register() {
     }));
   };
 
+  console.log(currentUser);
   return (
-    <Form mode="signUp" formData={formData} onChange={handleFormDataChange} />
+    <Form
+      mode="signUp"
+      formData={formData}
+      onChange={handleFormDataChange}
+      onSubmit={onSubmit}
+    />
   );
 }
 
