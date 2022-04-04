@@ -17,9 +17,7 @@ const LoginWindow = styled(Paper)({
 });
 
 function Form(props) {
-  const { mode, formData, onChange, onSubmit } = props;
-
-  const [initialLoad, setInitialLoad] = useState(true);
+  const { mode, formData, onChange, onSubmit, loading } = props;
 
   const formActions = {
     signIn: {
@@ -90,9 +88,9 @@ function Form(props) {
 
   const currentForm = formActions[mode];
 
-  const isFormValid = Object.values(formData).every(
-    (inputField) => inputField.isValid
-  );
+  const isFormValid =
+    Object.values(formData).every((inputField) => inputField.isValid) &&
+    !loading;
   return (
     <Box
       sx={{

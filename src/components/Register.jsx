@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Form from './Form';
 import { useAuth } from 'providers/AuthProvider';
 import validator from 'validator';
+import { useNotification } from 'providers/NotificationsProvider';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -31,15 +32,25 @@ function Register() {
     }
   });
 
-  const { signUp, currentUser } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = () => {
+  const { signUp, currentUser } = useAuth();
+  const { pushNotification } = useNotification();
+
+  const onSubmit = async () => {
     const { email, password, name } = formData;
-    signUp({
-      email: email.value,
-      password: password.value,
-      name: name.value
-    });
+
+    try {
+      setLoading(true);
+      await signUp({
+        email: email.value,
+        password: password.value,
+        name: name.value
+      });
+      pushNotification('Successfully signed Up!', '', 'success');
+    } catch {}
+
+    setLoading(false);
   };
 
   const handleFormDataChange = (event) => {
@@ -64,6 +75,7 @@ function Register() {
       formData={formData}
       onChange={handleFormDataChange}
       onSubmit={onSubmit}
+      loading={loading}
     />
   );
 }

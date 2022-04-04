@@ -9,6 +9,7 @@ import { ThemeProvider } from '@emotion/react';
 import DefaultTheme from 'Themes/defaultTheme';
 import { CssBaseline } from '@mui/material';
 import { AuthProvider } from 'providers/AuthProvider';
+import { NotificationProvider } from 'providers/NotificationsProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -17,10 +18,12 @@ root.render(
   <React.StrictMode>
     <Router>
       <AuthProvider>
-        <ThemeProvider theme={DefaultTheme}>
-          <App />
-          <CssBaseline />
-        </ThemeProvider>
+        <NotificationProvider>
+          <ThemeProvider theme={DefaultTheme}>
+            <App />
+            <CssBaseline />
+          </ThemeProvider>
+        </NotificationProvider>
       </AuthProvider>
     </Router>
   </React.StrictMode>
