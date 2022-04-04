@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
+import validator from 'validator';
 
 const styleClasses = {
   loginWindow: {
@@ -18,6 +19,8 @@ const LoginWindow = styled(Paper)({
 function Form(props) {
   const { mode, formData, onChange, onSubmit } = props;
 
+  const [initialLoad, setInitialLoad] = useState(true);
+
   const formActions = {
     signIn: {
       heading: 'SIGN IN',
@@ -25,13 +28,19 @@ function Form(props) {
       inputFields: [
         {
           label: 'Email',
-          value: formData.email,
-          name: 'email'
+          value: formData.email?.value,
+          name: 'email',
+          type: 'email',
+          required: true,
+          errorText: 'Invalid email format'
         },
         {
           label: 'Password',
-          value: formData.password,
-          name: 'password'
+          value: formData.password?.value,
+          name: 'password',
+          type: 'password',
+          required: true,
+          errorText: 'Password cannot be empty'
         }
       ],
       redirectText: (
@@ -47,18 +56,27 @@ function Form(props) {
       inputFields: [
         {
           label: 'Name',
-          value: formData.name,
-          name: 'name'
+          value: formData.name?.value,
+          name: 'name',
+          type: 'text',
+          required: true,
+          errorText: 'Name cannot be empty'
         },
         {
           label: 'Email',
-          value: formData.email,
-          name: 'email'
+          value: formData.email?.value,
+          name: 'email',
+          type: 'email',
+          required: true,
+          errorText: 'Invalid email format'
         },
         {
           label: 'Password',
-          value: formData.password,
-          name: 'password'
+          value: formData.password?.value,
+          name: 'password',
+          type: 'password',
+          required: true,
+          errorText: 'Passwor is too weak'
         }
       ],
       redirectText: (
@@ -71,6 +89,10 @@ function Form(props) {
   };
 
   const currentForm = formActions[mode];
+
+  const isFormValid = Object.values(formData).every(
+    (inputField) => inputField.isValid
+  );
   return (
     <Box
       sx={{
@@ -92,6 +114,7 @@ function Form(props) {
           }}
         ></Box>
         <Box
+          component="form"
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -104,19 +127,27 @@ function Form(props) {
           <Typography variant="h5" align="center">
             {currentForm.heading}
           </Typography>
-          {currentForm.inputFields.map((data) => (
-            <TextField
-              variant="outlined"
-              fullWidth
-              {...data}
-              onChange={onChange}
-            />
-          ))}
+          {currentForm.inputFields.map(({ errorText, ...data }) => {
+            const { isValid, dirty } = formData[data.name];
+            const showError = !isValid && dirty;
+
+            return (
+              <TextField
+                variant="outlined"
+                fullWidth
+                {...data}
+                onChange={onChange}
+                error={showError}
+                helperText={showError && errorText}
+              />
+            );
+          })}
           <Button
             variant="contained"
             color="primary"
             sx={{ width: 100 }}
             onClick={onSubmit}
+            disabled={!isFormValid}
           >
             {currentForm.btnText}
           </Button>
