@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import { useAuth } from 'providers/AuthProvider';
+import { useNotification } from 'providers/NotificationsProvider';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import validator from 'validator';
 import Form from './Form';
 
@@ -22,6 +25,18 @@ function Login() {
     }
   });
 
+  const [loading, setLoading] = useState(false);
+  const { signIn, currentUser } = useAuth();
+  const { pushNotification } = useNotification();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If user is logged in, restrict access to this page.
+    if (currentUser) {
+      navigate('/');
+    }
+  }, [JSON.stringify(currentUser)]);
+
   const handleFormDataChange = (event) => {
     const { name, value } = event.target;
 
@@ -39,8 +54,32 @@ function Login() {
     });
   };
 
+  const onSubmit = async () => {
+    const { email, password } = formData;
+
+    try {
+      setLoading(true);
+      await signIn({
+        email: email.value,
+        password: password.value
+      });
+      pushNotification('Logged in successfully!', '', 'success');
+      navigate('/');
+    } catch (error) {
+      pushNotification('User not found!', '', 'error');
+    }
+
+    setLoading(false);
+  };
+
   return (
-    <Form mode="signIn" formData={formData} onChange={handleFormDataChange} />
+    <Form
+      mode="signIn"
+      formData={formData}
+      onChange={handleFormDataChange}
+      onSubmit={onSubmit}
+      loading={loading}
+    />
   );
 }
 

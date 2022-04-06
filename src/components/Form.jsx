@@ -74,7 +74,7 @@ function Form(props) {
           name: 'password',
           type: 'password',
           required: true,
-          errorText: 'Passwor is too weak'
+          errorText: 'Password is too weak'
         }
       ],
       redirectText: (
