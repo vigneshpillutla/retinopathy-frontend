@@ -25,8 +25,8 @@ function Login() {
     }
   });
 
-  const [loading, setLoading] = useState(false);
-  const { signIn, currentUser } = useAuth();
+  // const [loading, setLoading] = useState(false);
+  const { signIn, currentUser, loading, setLoading } = useAuth();
   const { pushNotification } = useNotification();
   const navigate = useNavigate();
 

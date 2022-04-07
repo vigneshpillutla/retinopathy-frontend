@@ -16,6 +16,16 @@ function ImageUpload(props) {
     showImage();
   }, [JSON.stringify(file)]);
 
+  const cleanUp = () => {
+    setFile(null);
+    setImageURL('');
+  };
+
+  const onModalClose = () => {
+    onClose();
+    cleanUp();
+  };
+
   async function showImage() {
     if (!file || imageURL) return;
     try {
@@ -50,13 +60,15 @@ function ImageUpload(props) {
       pushNotification('Could not save the image', 'Try again later', 'error');
     } finally {
       setLoading(false);
+      cleanUp();
+      onClose();
     }
   };
 
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={onModalClose}
       fullWidth
       maxWidth="md"
       PaperProps={{
