@@ -5,11 +5,13 @@ import {
   signInWithEmailAndPassword,
   signOut as FirebaseSignOut
 } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, database } from '../firebase';
+import { ref as dbRef, onValue } from 'firebase/database';
 
 const AuthContext = React.createContext({
   currentUser: null,
   loading: true,
+  setLoading: () => {},
   signUp: async () => {},
   signIn: async () => {},
   signOut: async () => {}
@@ -22,6 +24,8 @@ const useAuth = () => {
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userImages, setUserImages] = useState(null);
+  const userImagesRef = dbRef(database, `users/${currentUser?.uid}/images`);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -31,6 +35,18 @@ function AuthProvider({ children }) {
 
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (!currentUser) {
+      setUserImages(null);
+      return;
+    }
+    return onValue(userImagesRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setUserImages(snapshot.val());
+      }
+    });
+  }, [currentUser]);
 
   const signUp = ({ name, email, password }) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -47,6 +63,7 @@ function AuthProvider({ children }) {
   const value = {
     currentUser,
     loading,
+    setLoading,
     signUp,
     signIn,
     signOut

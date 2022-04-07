@@ -1,8 +1,11 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage, database } from '../firebase';
-import { set, ref as dbRef, push } from 'firebase/database';
-
+import { set, ref as dbRef, push, get, child } from 'firebase/database';
+import keys from 'config/keys.js';
+import axios from 'axios';
 // const storageRef = ref(storage, 'test-child');
+
+const serverDomain = keys.serverDomain;
 
 const uploadImage = async (file) => {
   const date = new Date();
@@ -24,7 +27,34 @@ const updateData = (path, data, mode = 'replace') => {
   if (mode === 'push') {
     updateRef = push(updateRef);
   }
-  return set(updateRef, { ...data });
+  return set(updateRef, data);
 };
 
-export { uploadImage, updateData };
+const getData = (path) => {
+  const readRef = dbRef(database);
+
+  return get(child(readRef, path));
+};
+
+/**
+ *
+ * @param {*} uid The unique ID of the user
+ * @returns An object with values as the imageURL
+ */
+const getImages = (uid) => {
+  const path = `users/${uid}/images`;
+
+  return getData(path);
+};
+
+/**
+ * @description Backend API call for severity
+ */
+const getSeverity = (imageURL) => {
+  const url = `${serverDomain}/severity?imageURL=${encodeURIComponent(
+    imageURL
+  )}`;
+  return axios.get(url);
+};
+
+export { uploadImage, updateData, getData, getImages, getSeverity };

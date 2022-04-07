@@ -2,27 +2,30 @@ import { Dialog, Box, Button, Typography } from '@mui/material';
 import { useAuth } from 'providers/AuthProvider';
 import { useNotification } from 'providers/NotificationsProvider';
 import React, { useEffect, useRef, useState } from 'react';
-import { uploadImage, updateData } from 'utils/firebaseUtils';
+import { uploadImage, updateData, getSeverity } from 'utils/firebaseUtils';
 
 function ImageUpload(props) {
   const { open, onClose } = props;
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageURL, setImageURL] = useState('');
   const fileUploadRef = useRef();
   const { pushNotification } = useNotification();
-  const { currentUser } = useAuth();
+  const { currentUser, setLoading } = useAuth();
 
   useEffect(() => {
     showImage();
   }, [JSON.stringify(file)]);
 
   async function showImage() {
-    if (!file || imageUrl) return;
+    if (!file || imageURL) return;
     try {
+      setLoading(true);
       const url = await uploadImage(file);
-      setImageUrl(url);
+      setImageURL(url);
     } catch {
       pushNotification('Failed to upload image', '', 'error');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -32,17 +35,21 @@ function ImageUpload(props) {
 
   const saveImage = async () => {
     try {
+      setLoading(true);
+      const res = await getSeverity(imageURL);
+      const severity = res.data?.severity;
+      if (!severity) throw new Error('Could not predict severity');
       await updateData(
         `users/${currentUser.uid}/images`,
-        {
-          imageUrl
-        },
+        { imageURL, severity },
         'push'
       );
       pushNotification('Uploaded the image', '', 'success');
     } catch (error) {
       console.log(error);
       pushNotification('Could not save the image', 'Try again later', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,9 +86,9 @@ function ImageUpload(props) {
             gap: 1
           }}
         >
-          {imageUrl ? (
+          {imageURL ? (
             <img
-              src={imageUrl}
+              src={imageURL}
               alt=""
               width="100%"
               height="100%"
@@ -122,6 +129,7 @@ function ImageUpload(props) {
           variant="contained"
           color="secondary"
           onClick={saveImage}
+          disabled={!imageURL}
         >
           Submit
         </Button>

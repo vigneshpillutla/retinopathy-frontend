@@ -3,6 +3,7 @@ import { Button, Typography } from '@mui/material';
 import { useAuth } from 'providers/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import ImageUpload from './ImageUpload';
+import { getData, getImages } from 'utils/firebaseUtils';
 
 function Home() {
   const { currentUser, loading, signOut } = useAuth();
@@ -23,6 +24,7 @@ function Home() {
       navigate('/sign-in');
     }
   }, [loading]);
+
   return (
     <div>
       <Typography variant="h2">Home</Typography>
