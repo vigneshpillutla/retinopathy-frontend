@@ -41,10 +41,13 @@ function AuthProvider({ children }) {
           };
         }
       }
-      superUser.getInitials = function () {
-        const [firstName, lastName] = this.name?.toUpperCase()?.split?.(' ');
-        return `${firstName[0]}${lastName[0]}`;
-      };
+
+      if (superUser) {
+        superUser.getInitials = function () {
+          const [firstName, lastName] = this.name?.toUpperCase()?.split?.(' ');
+          return `${firstName[0]}${lastName?.[0] ?? ''}`;
+        };
+      }
       setCurrentUser(superUser);
       setLoading(false);
     });
