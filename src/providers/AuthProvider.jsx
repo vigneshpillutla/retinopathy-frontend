@@ -40,11 +40,11 @@ function AuthProvider({ children }) {
             ...snapshot.val()
           };
         }
-        superUser.getInitials = function () {
-          const [firstName, lastName] = this.name?.toUpperCase()?.split?.(' ');
-          return `${firstName[0]}${lastName[0]}`;
-        };
       }
+      superUser.getInitials = function () {
+        const [firstName, lastName] = this.name?.toUpperCase()?.split?.(' ');
+        return `${firstName[0]}${lastName[0]}`;
+      };
       setCurrentUser(superUser);
       setLoading(false);
     });
