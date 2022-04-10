@@ -1,13 +1,29 @@
-import { Dialog, Box, Button, Typography } from '@mui/material';
+import { Dialog, Box, Button, Typography, styled } from '@mui/material';
 import { useAuth } from 'providers/AuthProvider';
 import { useNotification } from 'providers/NotificationsProvider';
 import React, { useEffect, useRef, useState } from 'react';
 import { uploadImage, updateData, getSeverity } from 'utils/firebaseUtils';
 
+const styleClasses = {
+  imageDragArea: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 1,
+    height: '100%'
+  }
+};
+
+const ImageDragArea = styled('div')({
+  ...styleClasses.imageDragArea
+});
+
 function ImageUpload(props) {
   const { open, onClose } = props;
   const [file, setFile] = useState(null);
   const [imageURL, setImageURL] = useState('');
+  const [dragText, setDragText] = useState('Drag');
   const fileUploadRef = useRef();
   const { pushNotification } = useNotification();
   const { currentUser, setLoading } = useAuth();
@@ -65,6 +81,21 @@ function ImageUpload(props) {
     }
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragText('Drop');
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragText('Drag');
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setFile(e.dataTransfer.files[0]);
+  };
+
   return (
     <Dialog
       open={open}
@@ -90,12 +121,7 @@ function ImageUpload(props) {
             width: '100%',
             height: '100%',
             border: '2px dashed',
-            borderColor: 'text.secondary',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 1
+            borderColor: 'text.secondary'
           }}
         >
           {imageURL ? (
@@ -109,9 +135,13 @@ function ImageUpload(props) {
               }}
             />
           ) : (
-            <>
+            <ImageDragArea
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               <Typography variant="h4" color="text.secondary">
-                Drag your image here
+                {dragText} your image here
               </Typography>
               <Typography variant="h5" color="text.secondary">
                 or
@@ -133,7 +163,7 @@ function ImageUpload(props) {
                 ref={fileUploadRef}
                 onChange={handleFileChange}
               />
-            </>
+            </ImageDragArea>
           )}
         </Box>
         <Button
