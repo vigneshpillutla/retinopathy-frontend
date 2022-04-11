@@ -35,6 +35,7 @@ function ImageUpload(props) {
   const cleanUp = () => {
     setFile(null);
     setImageURL('');
+    setDragText('Drag');
   };
 
   const onModalClose = () => {
