@@ -3,10 +3,11 @@ import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 import validator from 'validator';
+import Opthalmologist_1 from 'img/opthalmologist_1.jpeg';
 
 const styleClasses = {
   loginWindow: {
-    height: '90%',
+    height: '80%',
     width: 'clamp(400px,90%,700px)',
     display: 'flex'
   }
@@ -108,7 +109,8 @@ function Form(props) {
               xs: 'none',
               md: 'block'
             },
-            background: 'gray'
+            background: `url(${Opthalmologist_1}) no-repeat`,
+            backgroundSize: 'contain'
           }}
         ></Box>
         <Box
