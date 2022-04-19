@@ -31,6 +31,12 @@ function Register() {
       validate(value) {
         return validator.isStrongPassword(value);
       }
+    },
+    opthalmologist: {
+      value: false,
+      isValid: true,
+      dirty: false,
+      validate: () => true
     }
   });
 
@@ -47,7 +53,7 @@ function Register() {
   }, [JSON.stringify(currentUser)]);
 
   const onSubmit = async () => {
-    const { email, password, name } = formData;
+    const { email, password, name, opthalmologist } = formData;
 
     try {
       setLoading(true);
@@ -58,9 +64,11 @@ function Register() {
       });
 
       const { user } = response;
+      const role = opthalmologist.value ? 'OPTHALMOLOGIST' : 'USER';
       await updateData(`users/${user.uid}`, {
         email: email.value,
-        name: name.value
+        name: name.value,
+        role
       });
       pushNotification('Successfully signed Up!', '', 'success');
     } catch (error) {
@@ -73,6 +81,7 @@ function Register() {
 
   const handleFormDataChange = (event) => {
     const { name, value } = event.target;
+    // debugger;
 
     setFormData((prev) => {
       const inputField = prev[name];

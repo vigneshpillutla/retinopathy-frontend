@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Box, Button, Paper, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Paper,
+  TextField,
+  Typography
+} from '@mui/material';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 import validator from 'validator';
@@ -76,6 +85,12 @@ function Form(props) {
           type: 'password',
           required: true,
           errorText: 'Password is too weak'
+        },
+        {
+          label: 'I am a certified opthalmologist.',
+          value: formData.opthalmologist?.value,
+          name: 'opthalmologist',
+          type: 'checkbox'
         }
       ],
       redirectText: (
@@ -130,6 +145,23 @@ function Form(props) {
           {currentForm.inputFields.map(({ errorText, ...data }) => {
             const { isValid, dirty } = formData[data.name];
             const showError = !isValid && dirty;
+
+            if (data.type === 'checkbox') {
+              return (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={data.value}
+                      onChange={onChange}
+                      name={data.name}
+                    />
+                  }
+                  label={data.label}
+                />
+                // <FormGroup>
+                // </FormGroup>
+              );
+            }
 
             return (
               <TextField

@@ -55,6 +55,7 @@ function AuthProvider({ children }) {
 
       if (superUser) {
         superUser.getInitials = function () {
+          // console.log('[name]', this.name);
           const [firstName, lastName] = this.name?.toUpperCase()?.split?.(' ');
           return `${firstName[0]}${lastName?.[0] ?? ''}`;
         };
