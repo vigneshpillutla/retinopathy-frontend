@@ -7,11 +7,13 @@ import {
 } from 'firebase/auth';
 import { auth, database } from '../firebase';
 import { ref as dbRef, onValue } from 'firebase/database';
-import { getData } from 'utils/firebaseUtils';
+import { getData, getLabels } from 'utils/firebaseUtils';
+import axios from 'axios';
 
 const AuthContext = React.createContext({
   currentUser: null,
   userImages: null,
+  severityLabels: [],
   loading: true,
   setLoading: () => {},
   signUp: async () => {},
@@ -27,9 +29,18 @@ function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userImages, setUserImages] = useState(null);
+  const [severityLabels, setSeverityLabels] = useState([]);
   const userImagesRef = dbRef(database, `users/${currentUser?.uid}/images`);
 
+  const getSeverityLabels = async () => {
+    const res = await getLabels();
+    if (res.status === 200) {
+      setSeverityLabels(Object.values(res.data));
+    }
+  };
+
   useEffect(() => {
+    getSeverityLabels();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       let superUser = user && { ...user };
       if (user) {
@@ -82,6 +93,7 @@ function AuthProvider({ children }) {
   const value = {
     currentUser,
     userImages,
+    severityLabels,
     loading,
     setLoading,
     signUp,

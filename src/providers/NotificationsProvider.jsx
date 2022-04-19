@@ -94,8 +94,10 @@ const NotificationProvider = ({ children }) => {
           }
           variant="filled"
         >
-          <AlertTitle>{title}</AlertTitle>
-          <Typography variant="h6">{description}</Typography>
+          <AlertTitle>
+            <Typography variant="h6">{title}</Typography>
+          </AlertTitle>
+          <Typography variant="subtitle1">{description}</Typography>
         </Alert>
       </Snackbar>
     </notificationContext.Provider>

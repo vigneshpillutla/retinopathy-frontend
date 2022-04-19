@@ -47,6 +47,8 @@ const getImages = (uid) => {
   return getData(path);
 };
 
+// *****************************Backend API Calls***************************************
+
 /**
  * @description Backend API call for severity
  */
@@ -57,4 +59,8 @@ const getSeverity = (imageURL) => {
   return axios.get(url);
 };
 
-export { uploadImage, updateData, getData, getImages, getSeverity };
+const getLabels = () => {
+  return axios.get(`${serverDomain}/labels`);
+};
+
+export { uploadImage, updateData, getData, getImages, getSeverity, getLabels };
