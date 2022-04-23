@@ -2,7 +2,7 @@ const prodConfig = {
   /**
    * @todo change domain after deployement
    */
-  serverDomain: 'http://localhost:5000'
+  serverDomain: 'https://retinopathy-backend.herokuapp.com/'
 };
 
 export default prodConfig;
