@@ -26,9 +26,11 @@ import { useNotification } from 'providers/NotificationsProvider';
 
 const SeverityResult = (props) => {
   const { imageURL, severity, openDialog } = props;
-  const { severityLabels } = useAuth();
+  const { severityLabels, currentUser } = useAuth();
 
   if (severityLabels.length === 0) return null;
+
+  const isOphthalmologist = currentUser.role === 'OPHTHALMOLOGIST';
 
   return (
     <Card sx={{ maxWidth: 345, width: '30%' }}>
@@ -36,9 +38,11 @@ const SeverityResult = (props) => {
       <CardContent>
         <Chip size="large" color="error" label={severityLabels[severity]} />
       </CardContent>
-      <CardActions>
-        <Button onClick={openDialog}>Rectify</Button>
-      </CardActions>
+      {isOphthalmologist && (
+        <CardActions>
+          <Button onClick={openDialog}>Rectify</Button>
+        </CardActions>
+      )}
     </Card>
   );
 };

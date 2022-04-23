@@ -12,7 +12,7 @@ import {
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 import validator from 'validator';
-import Opthalmologist_1 from 'img/opthalmologist_1.jpeg';
+import Ophthalmologist_1 from 'img/opthalmologist_1.jpeg';
 
 const styleClasses = {
   loginWindow: {
@@ -87,9 +87,9 @@ function Form(props) {
           errorText: 'Password is too weak'
         },
         {
-          label: 'I am a certified opthalmologist.',
-          value: formData.opthalmologist?.value,
-          name: 'opthalmologist',
+          label: 'I am a certified ophthalmologist.',
+          value: formData.ophthalmologist?.value,
+          name: 'ophthalmologist',
           type: 'checkbox'
         }
       ],
@@ -124,7 +124,7 @@ function Form(props) {
               xs: 'none',
               md: 'block'
             },
-            background: `url(${Opthalmologist_1}) no-repeat`,
+            background: `url(${Ophthalmologist_1}) no-repeat`,
             backgroundSize: 'contain'
           }}
         ></Box>

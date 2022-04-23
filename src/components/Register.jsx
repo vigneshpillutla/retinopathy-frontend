@@ -32,7 +32,7 @@ function Register() {
         return validator.isStrongPassword(value);
       }
     },
-    opthalmologist: {
+    ophthalmologist: {
       value: false,
       isValid: true,
       dirty: false,
@@ -53,7 +53,7 @@ function Register() {
   }, [JSON.stringify(currentUser)]);
 
   const onSubmit = async () => {
-    const { email, password, name, opthalmologist } = formData;
+    const { email, password, name, ophthalmologist } = formData;
 
     try {
       setLoading(true);
@@ -64,7 +64,7 @@ function Register() {
       });
 
       const { user } = response;
-      const role = opthalmologist.value ? 'OPTHALMOLOGIST' : 'USER';
+      const role = ophthalmologist.value ? 'OPhTHALMOLOGIST' : 'USER';
       await updateData(`users/${user.uid}`, {
         email: email.value,
         name: name.value,
