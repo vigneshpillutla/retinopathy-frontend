@@ -5,6 +5,7 @@ import validator from 'validator';
 import { useNotification } from 'providers/NotificationsProvider';
 import { useNavigate } from 'react-router-dom';
 import { updateData } from 'utils/firebaseUtils';
+import { ROLES } from 'config/roles';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -64,7 +65,7 @@ function Register() {
       });
 
       const { user } = response;
-      const role = ophthalmologist.value ? 'OPhTHALMOLOGIST' : 'USER';
+      const role = ophthalmologist.value ? ROLES.OPHTHALMOLOGIST : ROLES.USER;
       await updateData(`users/${user.uid}`, {
         email: email.value,
         name: name.value,
@@ -81,7 +82,6 @@ function Register() {
 
   const handleFormDataChange = (event) => {
     const { name, value } = event.target;
-    // debugger;
 
     setFormData((prev) => {
       const inputField = prev[name];

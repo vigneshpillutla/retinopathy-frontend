@@ -23,6 +23,7 @@ import { updateData } from 'utils/firebaseUtils';
 import Layout from './Layout';
 import HistoryIcon from '@mui/icons-material/History';
 import { useNotification } from 'providers/NotificationsProvider';
+import { ROLES } from 'config/roles';
 
 const SeverityResult = (props) => {
   const { imageURL, severity, openDialog } = props;
@@ -30,7 +31,7 @@ const SeverityResult = (props) => {
 
   if (severityLabels.length === 0) return null;
 
-  const isOphthalmologist = currentUser.role === 'OPHTHALMOLOGIST';
+  const isOphthalmologist = currentUser.role === ROLES.OPHTHALMOLOGIST;
 
   return (
     <Card sx={{ maxWidth: 345, width: '30%' }}>

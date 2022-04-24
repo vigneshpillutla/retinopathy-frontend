@@ -1,0 +1,4 @@
+export const ROLES = {
+  OPHTHALMOLOGIST: 'OPHTHALMOLOGIST',
+  USER: 'USER'
+};
